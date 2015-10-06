@@ -34,7 +34,7 @@ class Segment_Consumer_ForkCurl extends Segment_QueueConsumer {
     $secret = $this->secret;
 
     $protocol = $this->ssl() ? "https://" : "http://";
-    $host = "api.segment.io";
+    $host = "api.astronomer.io";
     $path = "/v1/import";
     $url = $protocol . $host . $path;
 

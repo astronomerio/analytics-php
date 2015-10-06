@@ -19,7 +19,7 @@ class Segment_Consumer_Socket extends Segment_QueueConsumer {
       $options["timeout"] = 5;
 
     if (!isset($options["host"]))
-      $options["host"] = "api.segment.io";
+      $options["host"] = "api.astronomer.io";
 
     parent::__construct($secret, $options);
   }
