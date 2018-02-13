@@ -4,7 +4,7 @@
  * require client
  */
 
-require(__DIR__ . "/lib/Segment.php");
+require_once(__DIR__ . "/lib/Segment.php");
 
 /**
  * Args
@@ -37,7 +37,7 @@ if(!file_exists($old)) {
 }
 
 if (!rename($old, $file)) {
-  print("error renaming from $old to $new\n");
+  print("error renaming from $old to $file\n");
   exit(1);
 }
 

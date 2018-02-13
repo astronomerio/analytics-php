@@ -4,7 +4,7 @@ if (!function_exists('json_encode')) {
     throw new Exception('Segment needs the JSON PHP extension.');
 }
 
-require(dirname(__FILE__) . '/Segment/Client.php');
+require_once(dirname(__FILE__) . '/Segment/Client.php');
 
 
 class Segment {
@@ -12,7 +12,7 @@ class Segment {
   private static $client;
 
   /**
-   * Initializes the default client to use. Uses the socket consumer by default.
+   * Initializes the default client to use. Uses the libcurl consumer by default.
    * @param  string $secret   your project's secret key
    * @param  array  $options  passed straight to the client
    */
@@ -57,8 +57,8 @@ class Segment {
   public static function group(array $message) {
     self::checkClient();
     $groupId = !empty($message["groupId"]);
-    $userId = !empty($message["userId"]);
-    self::assert($groupId && $userId, "Segment::group() expects userId and groupId");
+    self::assert($groupId, "Segment::group() expects groupId");
+    self::validate($message, "group");
     return self::$client->group($message);
   }
 
@@ -128,7 +128,7 @@ class Segment {
    */
   private static function checkClient(){
     if (null != self::$client) return;
-    throw new Exception("Analytics::init() must be called before any other tracking method.");
+    throw new Exception("Segment::init() must be called before any other tracking method.");
   }
 
   /**

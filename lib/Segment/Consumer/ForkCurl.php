@@ -4,6 +4,11 @@ class Segment_Consumer_ForkCurl extends Segment_QueueConsumer {
 
   protected $type = "ForkCurl";
 
+  //define getter method for consumer type
+  public function getConsumer() {
+    return $this->type;
+  }
+
 
   /**
    * Creates a new queued fork consumer which queues fork and identify
@@ -34,12 +39,21 @@ class Segment_Consumer_ForkCurl extends Segment_QueueConsumer {
     $secret = $this->secret;
 
     $protocol = $this->ssl() ? "https://" : "http://";
-    $host = "api.astronomer.io";
+    if ($this->host)
+      $host = $this->host;
+    else
+      $host = "api.astronomer.io";
     $path = "/v1/import";
     $url = $protocol . $host . $path;
 
     $cmd = "curl -u $secret: -X POST -H 'Content-Type: application/json'";
     $cmd.= " -d " . $payload . " '" . $url . "'";
+
+    // Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
+    $library = $messages[0]['context']['library'];
+    $libName = $library['name'];
+    $libVersion = $library['version'];
+    $cmd.= " -H 'User-Agent: $libName/$libVersion'";
 
     if (!$this->debug()) {
       $cmd .= " > /dev/null 2>&1 &";
